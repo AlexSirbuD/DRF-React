@@ -1,0 +1,47 @@
+version: "3"
+services:
+
+  db:
+    image: postgres:9.5
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - /dbdata:/var/lib/postgresql/data
+
+  backend:
+    volumes:
+      - static:/static    
+    build:
+      context: ./gapi
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+  
+  
+  frontend:
+    build:
+      context: ./frontend/tester
+    volumes:
+      - frontend:/app/build
+  
+  
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - static:/static
+      - frontend:/var/www/frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+
+volumes:
+  static:
+  frontend:
+
