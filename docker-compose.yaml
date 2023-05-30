@@ -24,7 +24,7 @@ services:
   
   frontend:
     build:
-      context: ./frontend/tester
+      context: ./frontend
     volumes:
       - frontend:/app/build
   
